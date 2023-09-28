@@ -117,7 +117,7 @@ async function onNotify(
     // extraData[ids[0]].type == "reader"
   ) {
     // BasicExampleFactory.exampleNotifierCallback();
-    let items = Zotero.Items.get(ids);
+    const items = Zotero.Items.get(ids);
     myHelper.update(items);
     // ztoolkit.getGlobal("alert")(items[0].getField('repository'));
   } else {
@@ -191,10 +191,7 @@ async function onNewitemNotify(
   // You can add your code to the corresponding notify type
   ztoolkit.getGlobal("alert")("TEST!");
   ztoolkit.log("notify", event, type, ids, extraData);
-  if (
-    event == "add" &&
-    type == "item"
-  ) {
+  if (event == "add" && type == "item") {
     BasicExampleFactory.exampleNotifierCallback();
     ztoolkit.getGlobal("alert")("TEST!");
   } else {

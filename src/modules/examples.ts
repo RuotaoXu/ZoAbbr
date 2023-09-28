@@ -692,8 +692,6 @@ export class PromptExampleFactory {
   }
 }
 
-
-
 export class HelperExampleFactory {
   @example
   static async dialogExample() {

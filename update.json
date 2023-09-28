@@ -4,7 +4,7 @@
       "updates": [
         {
           "version": "1.0.0",
-          "update_link": "https://github.com/windingwind/zotero-addon-template/releases/latest/download/zotero-abbr.xpi",
+          "update_link": "https://github.com/RuotaoXu/ZoAbbr/releases/latest/download/zotero-abbr.xpi",
           "applications": {
             "zotero": {
               "strict_min_version": "6.999"
