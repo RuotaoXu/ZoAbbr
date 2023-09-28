@@ -20,6 +20,8 @@ if (!basicTool.getGlobal("Zotero")[config.addonInstance]) {
   addon.hooks.onStartup();
 }
 
+
+
 function defineGlobal(name: Parameters<BasicTool["getGlobal"]>[0]): void;
 function defineGlobal(name: string, getter: () => any): void;
 function defineGlobal(name: string, getter?: () => any) {

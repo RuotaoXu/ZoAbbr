@@ -1,6 +1,6 @@
 import { config } from "../../package.json";
 import { getString } from "../utils/locale";
-
+import { myHelper } from "./myfunc";
 function example(
   target: any,
   propertyKey: string | symbol,
@@ -203,8 +203,10 @@ export class UIExampleFactory {
     ztoolkit.Menu.register("item", {
       tag: "menuitem",
       id: "zotero-itemmenu-addontemplate-test",
-      label: getString("menuitem-label"),
-      commandListener: (ev) => addon.hooks.onDialogEvents("dialogExample"),
+      label: "更新缩写",
+      // commandListener: (ev) => addon.hooks.onDialogEvents("dialogExample"),
+      commandListener: (ev) => myHelper.updateSelected(),
+      // oncommand: "alert('Hello World! Sub MenuitemXXX.')",
       icon: menuIcon,
     });
   }
@@ -220,7 +222,7 @@ export class UIExampleFactory {
           {
             tag: "menuitem",
             label: getString("menuitem-submenulabel"),
-            oncommand: "alert('Hello World! Sub Menuitem.')",
+            oncommand: "alert('Hello World! Sub MenuitemXXX.')",
           },
         ],
       },
@@ -689,6 +691,8 @@ export class PromptExampleFactory {
     ]);
   }
 }
+
+
 
 export class HelperExampleFactory {
   @example
