@@ -7,6 +7,11 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "include": ["src", "typings", "node_modules/zotero-types"],
+  "include": [
+    "src",
+    "typings",
+    "node_modules/zotero-types",
+    "backup/hooks.1.ts"
+  ],
   "exclude": ["build", "addon"]
 }
