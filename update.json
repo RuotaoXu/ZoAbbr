@@ -3,7 +3,7 @@
     "zoAbbr@euclpts.com": {
       "updates": [
         {
-          "version": "1.0.4",
+          "version": "1.0.5",
           "update_link": "https://github.com/RuotaoXu/ZoAbbr/releases/latest/download/zotero-abbr.xpi",
           "applications": {
             "zotero": {

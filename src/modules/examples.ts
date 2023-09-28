@@ -775,130 +775,130 @@ export class HelperExampleFactory {
         tag: "h2",
         properties: { innerHTML: "Toolkit Helper Examples" },
       })
-      .addCell(
-        6,
-        0,
-        {
-          tag: "button",
-          namespace: "html",
-          attributes: {
-            type: "button",
-          },
-          listeners: [
-            {
-              type: "click",
-              listener: (e: Event) => {
-                addon.hooks.onDialogEvents("clipboardExample");
-              },
-            },
-          ],
-          children: [
-            {
-              tag: "div",
-              styles: {
-                padding: "2.5px 15px",
-              },
-              properties: {
-                innerHTML: "example:clipboard",
-              },
-            },
-          ],
-        },
-        false,
-      )
-      .addCell(
-        7,
-        0,
-        {
-          tag: "button",
-          namespace: "html",
-          attributes: {
-            type: "button",
-          },
-          listeners: [
-            {
-              type: "click",
-              listener: (e: Event) => {
-                addon.hooks.onDialogEvents("filePickerExample");
-              },
-            },
-          ],
-          children: [
-            {
-              tag: "div",
-              styles: {
-                padding: "2.5px 15px",
-              },
-              properties: {
-                innerHTML: "example:filepicker",
-              },
-            },
-          ],
-        },
-        false,
-      )
-      .addCell(
-        8,
-        0,
-        {
-          tag: "button",
-          namespace: "html",
-          attributes: {
-            type: "button",
-          },
-          listeners: [
-            {
-              type: "click",
-              listener: (e: Event) => {
-                addon.hooks.onDialogEvents("progressWindowExample");
-              },
-            },
-          ],
-          children: [
-            {
-              tag: "div",
-              styles: {
-                padding: "2.5px 15px",
-              },
-              properties: {
-                innerHTML: "example:progressWindow",
-              },
-            },
-          ],
-        },
-        false,
-      )
-      .addCell(
-        9,
-        0,
-        {
-          tag: "button",
-          namespace: "html",
-          attributes: {
-            type: "button",
-          },
-          listeners: [
-            {
-              type: "click",
-              listener: (e: Event) => {
-                addon.hooks.onDialogEvents("vtableExample");
-              },
-            },
-          ],
-          children: [
-            {
-              tag: "div",
-              styles: {
-                padding: "2.5px 15px",
-              },
-              properties: {
-                innerHTML: "example:virtualized-table",
-              },
-            },
-          ],
-        },
-        false,
-      )
+      // .addCell(
+      //   6,
+      //   0,
+      //   {
+      //     tag: "button",
+      //     namespace: "html",
+      //     attributes: {
+      //       type: "button",
+      //     },
+      //     listeners: [
+      //       {
+      //         type: "click",
+      //         listener: (e: Event) => {
+      //           addon.hooks.onDialogEvents("clipboardExample");
+      //         },
+      //       },
+      //     ],
+      //     children: [
+      //       {
+      //         tag: "div",
+      //         styles: {
+      //           padding: "2.5px 15px",
+      //         },
+      //         properties: {
+      //           innerHTML: "example:clipboard",
+      //         },
+      //       },
+      //     ],
+      //   },
+      //   false,
+      // )
+      // .addCell(
+      //   7,
+      //   0,
+      //   {
+      //     tag: "button",
+      //     namespace: "html",
+      //     attributes: {
+      //       type: "button",
+      //     },
+      //     listeners: [
+      //       {
+      //         type: "click",
+      //         listener: (e: Event) => {
+      //           addon.hooks.onDialogEvents("filePickerExample");
+      //         },
+      //       },
+      //     ],
+      //     children: [
+      //       {
+      //         tag: "div",
+      //         styles: {
+      //           padding: "2.5px 15px",
+      //         },
+      //         properties: {
+      //           innerHTML: "example:filepicker",
+      //         },
+      //       },
+      //     ],
+      //   },
+      //   false,
+      // )
+      // .addCell(
+      //   8,
+      //   0,
+      //   {
+      //     tag: "button",
+      //     namespace: "html",
+      //     attributes: {
+      //       type: "button",
+      //     },
+      //     listeners: [
+      //       {
+      //         type: "click",
+      //         listener: (e: Event) => {
+      //           addon.hooks.onDialogEvents("progressWindowExample");
+      //         },
+      //       },
+      //     ],
+      //     children: [
+      //       {
+      //         tag: "div",
+      //         styles: {
+      //           padding: "2.5px 15px",
+      //         },
+      //         properties: {
+      //           innerHTML: "example:progressWindow",
+      //         },
+      //       },
+      //     ],
+      //   },
+      //   false,
+      // )
+      // .addCell(
+      //   9,
+      //   0,
+      //   {
+      //     tag: "button",
+      //     namespace: "html",
+      //     attributes: {
+      //       type: "button",
+      //     },
+      //     listeners: [
+      //       {
+      //         type: "click",
+      //         listener: (e: Event) => {
+      //           addon.hooks.onDialogEvents("vtableExample");
+      //         },
+      //       },
+      //     ],
+      //     children: [
+      //       {
+      //         tag: "div",
+      //         styles: {
+      //           padding: "2.5px 15px",
+      //         },
+      //         properties: {
+      //           innerHTML: "example:virtualized-table",
+      //         },
+      //       },
+      //     ],
+      //   },
+      //   false,
+      // )
       .addButton("Confirm", "confirm")
       .addButton("Cancel", "cancel")
       .addButton("Help", "help", {

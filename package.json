@@ -1,6 +1,6 @@
 {
   "name": "zotero-abbr",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Zotero Journal and Conference Name Abbreviation",
   "config": {
     "addonName": "Zotero Name Abbreviation",
