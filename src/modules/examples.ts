@@ -90,14 +90,14 @@ export class KeyExampleFactory {
     const cmdsetId = `${config.addonRef}-cmdset`;
     const cmdSmallerId = `${config.addonRef}-cmd-smaller`;
     // Register an event key for Alt+L
-    ztoolkit.Shortcut.register("event", {
-      id: `${config.addonRef}-key-larger`,
-      key: "L",
-      modifiers: "alt",
-      callback: (keyOptions) => {
-        addon.hooks.onShortcuts("larger");
-      },
-    });
+    // ztoolkit.Shortcut.register("event", {
+    //   id: `${config.addonRef}-key-larger`,
+    //   key: "L",
+    //   modifiers: "alt",
+    //   callback: (keyOptions) => {
+    //     addon.hooks.onShortcuts("larger");
+    //   },
+    // });
     // Register an element key using <key> for Alt+S
     ztoolkit.Shortcut.register("element", {
       id: `${config.addonRef}-key-smaller`,
@@ -127,14 +127,14 @@ export class KeyExampleFactory {
       },
     });
     // Register an event key to check confliction
-    ztoolkit.Shortcut.register("event", {
-      id: `${config.addonRef}-key-check-conflict`,
-      key: "C",
-      modifiers: "alt",
-      callback: (keyOptions) => {
-        addon.hooks.onShortcuts("confliction");
-      },
-    });
+    // ztoolkit.Shortcut.register("event", {
+    //   id: `${config.addonRef}-key-check-conflict`,
+    //   key: "C",
+    //   modifiers: "alt",
+    //   callback: (keyOptions) => {
+    //     addon.hooks.onShortcuts("confliction");
+    //   },
+    // });
     new ztoolkit.ProgressWindow(config.addonName)
       .createLine({
         text: "Example Shortcuts: Alt+L/S/C",
