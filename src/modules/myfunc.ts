@@ -197,7 +197,7 @@ function getSeries(name: string) {
   return series;
 }
 export class myHelper {
-  static update(items) {
+  static update(items:any) {
     for (let i = 0; i < items.length; i++) {
       let name = "";
       if (items[i].getField("conferenceName")) {
