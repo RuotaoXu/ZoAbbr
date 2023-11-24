@@ -197,32 +197,31 @@ function getSeries(name: string) {
   return series;
 }
 export class myHelper {
-  static update(items: any) {
-    for (let i = 0; i < items.length; i++) {
-      let name = "";
-      if (items[i].getField("conferenceName")) {
-        name = items[i].getField("conferenceName");
-      } else if (items[i].getField("publicationTitle")) {
-        name = items[i].getField("publicationTitle");
-      } else if (items[i].getField("proceedingsTitle")) {
-        name = items[i].getField("proceedingsTitle");
-      } else if (items[i].getField("repository")) {
-        name = items[i].getField("repository");
-      }
-
-      let series = "";
-      if (items[i].getField("series")) {
-        series = items[i].getField("series");
-      } else {
-        series = getSeries(name);
-        items[i].setField("series", series);
-      }
-      items[i].saveTx();
-      // ztoolkit.getGlobal("alert")(series);
+  static update(item: any) {
+    let name = "";
+    if (item.getField("conferenceName")) {
+      name = item.getField("conferenceName");
+    } else if (item.getField("publicationTitle")) {
+      name = item.getField("publicationTitle");
+    } else if (item.getField("proceedingsTitle")) {
+      name = item.getField("proceedingsTitle");
+    } else if (item.getField("repository")) {
+      name = item.getField("repository");
     }
+    let series = "";
+    if (item.getField("series")) {
+      series = item.getField("series");
+    } else {
+      series = getSeries(name);
+      item.setField("series", series);
+    }
+    item.saveTx();
+    // ztoolkit.getGlobal("alert")(series);
   }
   static updateSelected() {
     const items = ZoteroPane.getSelectedItems();
-    myHelper.update(items);
+    for (let i = 0; i < items.length; i++) {
+      myHelper.update(items[i]);
+    }
   }
 }

@@ -117,9 +117,9 @@ async function onNotify(
     // extraData[ids[0]].type == "reader"
   ) {
     // BasicExampleFactory.exampleNotifierCallback();
-    const items = Zotero.Items.get(Number(ids));
+    const items = Zotero.Items.get(Number(ids[0]));
+    // ztoolkit.getGlobal("alert")(items.getField("repository"));
     myHelper.update(items);
-    // ztoolkit.getGlobal("alert")(items[0].getField('repository'));
   } else {
     return;
   }
