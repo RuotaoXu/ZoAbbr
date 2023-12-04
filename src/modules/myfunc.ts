@@ -190,6 +190,8 @@ function getSeries(name: string) {
     series = "MICCAI";
   } else if (name.match(/Asian Conference on Computer Vision/i)) {
     series = "ACCV";
+  } (name.match(/Conference on Robot Learning/i)) {
+    series = "CoRL";
   }
   //   else if (name.match(/.*arXiv.*/i)) {
   //     series = "arXiv";
