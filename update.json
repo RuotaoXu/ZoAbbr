@@ -1,10 +1,10 @@
 {
   "addons": {
-    "zoAbbr@euclpts.com": {
+    "__addonID__": {
       "updates": [
         {
-          "version": "1.2.0",
-          "update_link": "https://github.com/RuotaoXu/ZoAbbr/releases/latest/download/zotero-abbr.xpi",
+          "version": "__buildVersion__",
+          "update_link": "__updateLink__",
           "applications": {
             "zotero": {
               "strict_min_version": "6.999"
