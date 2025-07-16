@@ -70,30 +70,66 @@ async function onNotify(
   ids: Array<string | number>,
   extraData: { [key: string]: any },
 ) {
-  // You can add your code to the corresponding notify type
-  // const popupWin = new ztoolkit.ProgressWindow(addon.data.config.addonName, {
-  //   closeOnClick: true,
-  //   closeTime: -1,
-  // })
-  //   .createLine({
-  //     text: getString("startup-begin"),
-  //     type: "default",
-  //     progress: 0,
-  //   })
-  //   .show();
-  ztoolkit.log("notify", event, type, ids, extraData);
+ ztoolkit.log("notify", event, type, ids, extraData);
   if (
     event == "add" &&
     type == "item"
-    // &&
-    // extraData[ids[0]].type == "reader"
   ) {
-    // BasicExampleFactory.exampleNotifierCallback();
     const items = Zotero.Items.get(Number(ids[0]));
-    // ztoolkit.getGlobal("alert")(items.getField("repository"));
     myHelper.update(items);
   } else {
     return;
+  }
+}
+
+/**
+ * This function is just an example of dispatcher for Preference UI events.
+ * Any operations should be placed in a function to keep this funcion clear.
+ * @param type event type
+ * @param data event data
+ */
+async function onPrefsEvent(type: string, data: { [key: string]: any }) {
+  switch (type) {
+    case "load":
+      registerPrefsScripts(data.window);
+      break;
+    default:
+      return;
+  }
+}
+
+function onShortcuts(type: string) {
+  switch (type) {
+    case "larger":
+      KeyExampleFactory.exampleShortcutLargerCallback();
+      break;
+    case "smaller":
+      KeyExampleFactory.exampleShortcutSmallerCallback();
+      break;
+    default:
+      break;
+  }
+}
+
+function onDialogEvents(type: string) {
+  switch (type) {
+    case "dialogExample":
+      HelperExampleFactory.dialogExample();
+      break;
+    case "clipboardExample":
+      HelperExampleFactory.clipboardExample();
+      break;
+    case "filePickerExample":
+      HelperExampleFactory.filePickerExample();
+      break;
+    case "progressWindowExample":
+      HelperExampleFactory.progressWindowExample();
+      break;
+    case "vtableExample":
+      HelperExampleFactory.vtableExample();
+      break;
+    default:
+      break;
   }
 }
 
@@ -107,4 +143,7 @@ export default {
   onMainWindowLoad,
   onMainWindowUnload,
   onNotify,
+  onPrefsEvent,
+  onShortcuts,
+  onDialogEvents,
 };
