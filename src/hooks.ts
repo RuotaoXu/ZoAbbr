@@ -5,7 +5,6 @@ import {
   PromptExampleFactory,
   UIExampleFactory,
 } from "./modules/examples";
-import { config } from "../package.json";
 import { getString, initLocale } from "./utils/locale";
 import { registerPrefsScripts } from "./modules/preferenceScript";
 import { createZToolkit } from "./utils/ztoolkit";
@@ -17,20 +16,40 @@ async function onStartup() {
     Zotero.unlockPromise,
     Zotero.uiReadyPromise,
   ]);
+
   initLocale();
 
   BasicExampleFactory.registerPrefs();
 
   BasicExampleFactory.registerNotifier();
 
-  await onMainWindowLoad(window);
+  // KeyExampleFactory.registerShortcuts();
+
+  // await UIExampleFactory.registerExtraColumn();
+
+  // await UIExampleFactory.registerExtraColumnWithCustomCell();
+
+  // UIExampleFactory.registerItemPaneCustomInfoRow();
+
+  UIExampleFactory.registerItemPaneSection();
+
+  // UIExampleFactory.registerReaderItemPaneSection();
+
+  await Promise.all(
+    Zotero.getMainWindows().map((win) => onMainWindowLoad(win)),
+  );
 }
 
-async function onMainWindowLoad(win: Window): Promise<void> {
+async function onMainWindowLoad(win: _ZoteroTypes.MainWindow): Promise<void> {
   // Create ztoolkit for every window
   addon.data.ztoolkit = createZToolkit();
 
-  // const popupWin = new ztoolkit.ProgressWindow(config.addonName, {
+  // @ts-ignore This is a moz feature
+  win.MozXULElement.insertFTLIfNeeded(
+    `${addon.data.config.addonRef}-mainWindow.ftl`,
+  );
+
+  // const popupWin = new ztoolkit.ProgressWindow(addon.data.config.addonName, {
   //   closeOnClick: true,
   //   closeTime: -1,
   // })
@@ -41,35 +60,23 @@ async function onMainWindowLoad(win: Window): Promise<void> {
   //   })
   //   .show();
 
-  // KeyExampleFactory.registerShortcuts();
-
   await Zotero.Promise.delay(1000);
   // popupWin.changeLine({
   //   progress: 30,
   //   text: `[30%] ${getString("startup-begin")}`,
   // });
 
-  // UIExampleFactory.registerStyleSheet();
+  // UIExampleFactory.registerStyleSheet(win);
 
-  UIExampleFactory.registerRightClickMenuItem();
+  // UIExampleFactory.registerRightClickMenuItem();
 
-  // UIExampleFactory.registerRightClickMenuPopup();
+  // UIExampleFactory.registerRightClickMenuPopup(win);
 
   // UIExampleFactory.registerWindowMenuWithSeparator();
 
-  // await UIExampleFactory.registerExtraColumn();
-
-  // await UIExampleFactory.registerExtraColumnWithCustomCell();
-
-  // await UIExampleFactory.registerCustomItemBoxRow();
-
-  // UIExampleFactory.registerLibraryTabPanel();
-
-  // await UIExampleFactory.registerReaderTabPanel();
-
   // PromptExampleFactory.registerNormalCommandExample();
 
-  // PromptExampleFactory.registerAnonymousCommandExample();
+  // PromptExampleFactory.registerAnonymousCommandExample(win);
 
   // PromptExampleFactory.registerConditionalCommandExample();
 
@@ -94,21 +101,51 @@ function onShutdown(): void {
   addon.data.dialog?.window?.close();
   // Remove addon object
   addon.data.alive = false;
-  delete Zotero[config.addonInstance];
+  // @ts-ignore - Plugin instance is not typed
+  delete Zotero[addon.data.config.addonInstance];
 }
 
 /**
  * This function is just an example of dispatcher for Notify events.
  * Any operations should be placed in a function to keep this funcion clear.
  */
-async function onNotify(
+async function onNotify_old(
   event: string,
   type: string,
   ids: Array<string | number>,
   extraData: { [key: string]: any },
 ) {
   // You can add your code to the corresponding notify type
+  ztoolkit.log("notify", event, type, ids, extraData);
+  if (
+    event == "select" &&
+    type == "tab" &&
+    extraData[ids[0]].type == "reader"
+  ) {
+    BasicExampleFactory.exampleNotifierCallback();
+  } else {
+    return;
+  }
+}
 
+async function onNotify(
+
+  event: string,
+  type: string,
+  ids: Array<string | number>,
+  extraData: { [key: string]: any },
+) {
+  // You can add your code to the corresponding notify type
+  // const popupWin = new ztoolkit.ProgressWindow(addon.data.config.addonName, {
+  //   closeOnClick: true,
+  //   closeTime: -1,
+  // })
+  //   .createLine({
+  //     text: getString("startup-begin"),
+  //     type: "default",
+  //     progress: 0,
+  //   })
+  //   .show();
   ztoolkit.log("notify", event, type, ids, extraData);
   if (
     event == "add" &&
@@ -149,9 +186,6 @@ function onShortcuts(type: string) {
     case "smaller":
       KeyExampleFactory.exampleShortcutSmallerCallback();
       break;
-    case "confliction":
-      KeyExampleFactory.exampleShortcutConflictingCallback();
-      break;
     default:
       break;
   }
@@ -181,30 +215,15 @@ function onDialogEvents(type: string) {
 
 // Add your hooks here. For element click, etc.
 // Keep in mind hooks only do dispatch. Don't add code that does real jobs in hooks.
-// Otherwise the code would be hard to read and maintian.
-async function onNewitemNotify(
-  event: string,
-  type: string,
-  ids: Array<string | number>,
-  extraData: { [key: string]: any },
-) {
-  // You can add your code to the corresponding notify type
-  ztoolkit.getGlobal("alert")("TEST!");
-  ztoolkit.log("notify", event, type, ids, extraData);
-  if (event == "add" && type == "item") {
-    BasicExampleFactory.exampleNotifierCallback();
-    ztoolkit.getGlobal("alert")("TEST!");
-  } else {
-    return;
-  }
-}
+// Otherwise the code would be hard to read and maintain.
+
 export default {
   onStartup,
   onShutdown,
   onMainWindowLoad,
   onMainWindowUnload,
   onNotify,
-  // onPrefsEvent,
-  // onShortcuts,
-  // onDialogEvents,
+  onPrefsEvent,
+  onShortcuts,
+  onDialogEvents,
 };

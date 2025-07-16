@@ -1,17 +1,5 @@
 {
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "module": "commonjs",
-    "target": "ES2016",
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true
-  },
-  "include": [
-    "src",
-    "typings",
-    "node_modules/zotero-types",
-    "backup/hooks.1.ts"
-  ],
+  "extends": "zotero-types/entries/sandbox/",
+  "include": ["src", "typings"],
   "exclude": ["build", "addon"]
 }

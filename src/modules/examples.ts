@@ -1,6 +1,5 @@
-import { config } from "../../package.json";
-import { getString } from "../utils/locale";
-import { myHelper } from "./myfunc";
+import { getLocaleID, getString } from "../utils/locale";
+
 function example(
   target: any,
   propertyKey: string | symbol,
@@ -44,19 +43,17 @@ export class BasicExampleFactory {
       "file",
     ]);
 
-    // Unregister callback when the window closes (important to avoid a memory leak)
-    window.addEventListener(
-      "unload",
-      (e: Event) => {
-        this.unregisterNotifier(notifierID);
+    Zotero.Plugins.addObserver({
+      shutdown: ({ id }) => {
+        if (id === addon.data.config.addonID)
+          this.unregisterNotifier(notifierID);
       },
-      false,
-    );
+    });
   }
 
   @example
   static exampleNotifierCallback() {
-    new ztoolkit.ProgressWindow(config.addonName)
+    new ztoolkit.ProgressWindow(addon.data.config.addonName)
       .createLine({
         text: "Open Tab Detected!",
         type: "success",
@@ -72,70 +69,30 @@ export class BasicExampleFactory {
 
   @example
   static registerPrefs() {
-    const prefOptions = {
-      pluginID: config.addonID,
-      src: rootURI + "chrome/content/preferences.xhtml",
+    Zotero.PreferencePanes.register({
+      pluginID: addon.data.config.addonID,
+      src: rootURI + "content/preferences.xhtml",
       label: getString("prefs-title"),
-      image: `chrome://${config.addonRef}/content/icons/favicon.png`,
-      defaultXUL: true,
-    };
-    ztoolkit.PreferencePane.register(prefOptions);
+      image: `chrome://${addon.data.config.addonRef}/content/icons/favicon.png`,
+    });
   }
 }
 
 export class KeyExampleFactory {
   @example
   static registerShortcuts() {
-    const keysetId = `${config.addonRef}-keyset`;
-    const cmdsetId = `${config.addonRef}-cmdset`;
-    const cmdSmallerId = `${config.addonRef}-cmd-smaller`;
     // Register an event key for Alt+L
-    // ztoolkit.Shortcut.register("event", {
-    //   id: `${config.addonRef}-key-larger`,
-    //   key: "L",
-    //   modifiers: "alt",
-    //   callback: (keyOptions) => {
-    //     addon.hooks.onShortcuts("larger");
-    //   },
-    // });
-    // Register an element key using <key> for Alt+S
-    ztoolkit.Shortcut.register("element", {
-      id: `${config.addonRef}-key-smaller`,
-      key: "S",
-      modifiers: "alt",
-      xulData: {
-        document,
-        command: cmdSmallerId,
-        _parentId: keysetId,
-        _commandOptions: {
-          id: cmdSmallerId,
-          document,
-          _parentId: cmdsetId,
-          oncommand: `Zotero.${config.addonInstance}.hooks.onShortcuts('smaller')`,
-        },
-      },
+    ztoolkit.Keyboard.register((ev, keyOptions) => {
+      ztoolkit.log(ev, keyOptions.keyboard);
+      if (keyOptions.keyboard?.equals("shift,l")) {
+        addon.hooks.onShortcuts("larger");
+      }
+      if (ev.shiftKey && ev.key === "S") {
+        addon.hooks.onShortcuts("smaller");
+      }
     });
-    // Here we register an conflict key for Alt+S
-    // just to show how the confliction check works.
-    // This is something you should avoid in your plugin.
-    ztoolkit.Shortcut.register("event", {
-      id: `${config.addonRef}-key-smaller-conflict`,
-      key: "S",
-      modifiers: "alt",
-      callback: (keyOptions) => {
-        ztoolkit.getGlobal("alert")("Smaller! This is a conflict key.");
-      },
-    });
-    // Register an event key to check confliction
-    // ztoolkit.Shortcut.register("event", {
-    //   id: `${config.addonRef}-key-check-conflict`,
-    //   key: "C",
-    //   modifiers: "alt",
-    //   callback: (keyOptions) => {
-    //     addon.hooks.onShortcuts("confliction");
-    //   },
-    // });
-    new ztoolkit.ProgressWindow(config.addonName)
+
+    new ztoolkit.ProgressWindow(addon.data.config.addonName)
       .createLine({
         text: "Example Shortcuts: Alt+L/S/C",
         type: "success",
@@ -145,7 +102,7 @@ export class KeyExampleFactory {
 
   @example
   static exampleShortcutLargerCallback() {
-    new ztoolkit.ProgressWindow(config.addonName)
+    new ztoolkit.ProgressWindow(addon.data.config.addonName)
       .createLine({
         text: "Larger!",
         type: "default",
@@ -155,64 +112,45 @@ export class KeyExampleFactory {
 
   @example
   static exampleShortcutSmallerCallback() {
-    new ztoolkit.ProgressWindow(config.addonName)
+    new ztoolkit.ProgressWindow(addon.data.config.addonName)
       .createLine({
         text: "Smaller!",
         type: "default",
       })
       .show();
   }
-
-  @example
-  static exampleShortcutConflictingCallback() {
-    const conflictingGroups = ztoolkit.Shortcut.checkAllKeyConflicting();
-    new ztoolkit.ProgressWindow("Check Key Conflicting")
-      .createLine({
-        text: `${conflictingGroups.length} groups of conflicting keys found. Details are in the debug output/console.`,
-      })
-      .show(-1);
-    ztoolkit.log(
-      "Conflicting:",
-      conflictingGroups,
-      "All keys:",
-      ztoolkit.Shortcut.getAll(),
-    );
-  }
 }
 
 export class UIExampleFactory {
   @example
-  static registerStyleSheet() {
-    const styles = ztoolkit.UI.createElement(document, "link", {
+  static registerStyleSheet(win: _ZoteroTypes.MainWindow) {
+    const doc = win.document;
+    const styles = ztoolkit.UI.createElement(doc, "link", {
       properties: {
         type: "text/css",
         rel: "stylesheet",
-        href: `chrome://${config.addonRef}/content/zoteroPane.css`,
+        href: `chrome://${addon.data.config.addonRef}/content/zoteroPane.css`,
       },
     });
-    document.documentElement.appendChild(styles);
-    document
-      .getElementById("zotero-item-pane-content")
-      ?.classList.add("makeItRed");
+    doc.documentElement?.appendChild(styles);
+    doc.getElementById("zotero-item-pane-content")?.classList.add("makeItRed");
   }
 
   @example
   static registerRightClickMenuItem() {
-    const menuIcon = `chrome://${config.addonRef}/content/icons/favicon@0.5x.png`;
+    const menuIcon = `chrome://${addon.data.config.addonRef}/content/icons/favicon@0.5x.png`;
     // item menuitem with icon
     ztoolkit.Menu.register("item", {
       tag: "menuitem",
       id: "zotero-itemmenu-addontemplate-test",
-      label: "更新缩写",
-      // commandListener: (ev) => addon.hooks.onDialogEvents("dialogExample"),
-      commandListener: (ev) => myHelper.updateSelected(),
-      // oncommand: "alert('Hello World! Sub MenuitemXXX.')",
+      label: getString("menuitem-label"),
+      commandListener: (ev) => addon.hooks.onDialogEvents("dialogExample"),
       icon: menuIcon,
     });
   }
 
   @example
-  static registerRightClickMenuPopup() {
+  static registerRightClickMenuPopup(win: Window) {
     ztoolkit.Menu.register(
       "item",
       {
@@ -222,12 +160,12 @@ export class UIExampleFactory {
           {
             tag: "menuitem",
             label: getString("menuitem-submenulabel"),
-            oncommand: "alert('Hello World! Sub MenuitemXXX.')",
+            oncommand: "alert('Hello World! Sub Menuitem.')",
           },
         ],
       },
       "before",
-      document.querySelector(
+      win.document?.querySelector(
         "#zotero-itemmenu-addontemplate-test",
       ) as XUL.MenuItem,
     );
@@ -248,206 +186,165 @@ export class UIExampleFactory {
 
   @example
   static async registerExtraColumn() {
-    await ztoolkit.ItemTree.register(
-      "test1",
-      "text column",
-      (
-        field: string,
-        unformatted: boolean,
-        includeBaseMapped: boolean,
-        item: Zotero.Item,
-      ) => {
+    const field = "test1";
+    await Zotero.ItemTreeManager.registerColumns({
+      pluginID: addon.data.config.addonID,
+      dataKey: field,
+      label: "text column",
+      dataProvider: (item: Zotero.Item, dataKey: string) => {
         return field + String(item.id);
       },
-      {
-        iconPath: "chrome://zotero/skin/cross.png",
-      },
-    );
+      iconPath: "chrome://zotero/skin/cross.png",
+    });
   }
 
   @example
   static async registerExtraColumnWithCustomCell() {
-    await ztoolkit.ItemTree.register(
-      "test2",
-      "custom column",
-      (
-        field: string,
-        unformatted: boolean,
-        includeBaseMapped: boolean,
-        item: Zotero.Item,
-      ) => {
-        return String(item.id);
+    const field = "test2";
+    await Zotero.ItemTreeManager.registerColumns({
+      pluginID: addon.data.config.addonID,
+      dataKey: field,
+      label: "custom column",
+      dataProvider: (item: Zotero.Item, dataKey: string) => {
+        return field + String(item.id);
       },
-      {
-        renderCell(index, data, column) {
-          ztoolkit.log("Custom column cell is rendered!");
-          const span = document.createElementNS(
-            "http://www.w3.org/1999/xhtml",
-            "span",
-          );
-          span.className = `cell ${column.className}`;
-          span.style.background = "#0dd068";
-          span.innerText = "⭐" + data;
-          return span;
-        },
+      renderCell(index, data, column, isFirstColumn, doc) {
+        ztoolkit.log("Custom column cell is rendered!");
+        const span = doc.createElement("span");
+        span.className = `cell ${column.className}`;
+        span.style.background = "#0dd068";
+        span.innerText = "⭐" + data;
+        return span;
       },
-    );
+    });
   }
 
   @example
-  static async registerCustomItemBoxRow() {
-    await ztoolkit.ItemBox.register(
-      "itemBoxFieldEditable",
-      "Editable Custom Field",
-      (field, unformatted, includeBaseMapped, item, original) => {
-        return (
-          ztoolkit.ExtraField.getExtraField(item, "itemBoxFieldEditable") || ""
-        );
+  static registerItemPaneCustomInfoRow() {
+    Zotero.ItemPaneManager.registerInfoRow({
+      rowID: "example",
+      pluginID: addon.data.config.addonID,
+      editable: true,
+      label: {
+        l10nID: getLocaleID("item-info-row-example-label"),
       },
-      {
-        editable: true,
-        setFieldHook: (field, value, loadIn, item, original) => {
-          window.alert("Custom itemBox value is changed and saved to extra!");
-          ztoolkit.ExtraField.setExtraField(
-            item,
-            "itemBoxFieldEditable",
-            value,
-          );
-          return true;
-        },
-        index: 1,
+      position: "afterCreators",
+      onGetData: ({ item }) => {
+        return item.getField("title");
       },
-    );
-
-    await ztoolkit.ItemBox.register(
-      "itemBoxFieldNonEditable",
-      "Non-Editable Custom Field",
-      (field, unformatted, includeBaseMapped, item, original) => {
-        return (
-          "[CANNOT EDIT THIS]" + (item.getField("title") as string).slice(0, 10)
-        );
+      onSetData: ({ item, value }) => {
+        item.setField("title", value);
       },
-      {
-        editable: false,
-        index: 2,
-      },
-    );
+    });
   }
 
   @example
-  static registerLibraryTabPanel() {
-    const tabId = ztoolkit.LibraryTabPanel.register(
-      getString("tabpanel-lib-tab-label"),
-      (panel: XUL.Element, win: Window) => {
-        const elem = ztoolkit.UI.createElement(win.document, "vbox", {
-          children: [
-            {
-              tag: "h2",
-              properties: {
-                innerText: "Hello World!",
-              },
-            },
-            {
-              tag: "div",
-              properties: {
-                innerText: "This is a library tab.",
-              },
-            },
-            {
-              tag: "button",
-              namespace: "html",
-              properties: {
-                innerText: "Unregister",
-              },
-              listeners: [
-                {
-                  type: "click",
-                  listener: () => {
-                    ztoolkit.LibraryTabPanel.unregister(tabId);
-                  },
-                },
-              ],
-            },
-          ],
+  static registerItemPaneSection() {
+    Zotero.ItemPaneManager.registerSection({
+      paneID: "example",
+      pluginID: addon.data.config.addonID,
+      header: {
+        l10nID: getLocaleID("item-section-example1-head-text"),
+        icon: "chrome://zotero/skin/16/universal/book.svg",
+      },
+      sidenav: {
+        l10nID: getLocaleID("item-section-example1-sidenav-tooltip"),
+        icon: "chrome://zotero/skin/20/universal/save.svg",
+      },
+      onRender: ({ body, item, editable, tabType }) => {
+        body.textContent = JSON.stringify({
+          id: item?.id,
+          editable,
+          tabType,
         });
-        panel.append(elem);
       },
-      {
-        targetIndex: 1,
-      },
-    );
+    });
   }
 
   @example
-  static async registerReaderTabPanel() {
-    const tabId = await ztoolkit.ReaderTabPanel.register(
-      getString("tabpanel-reader-tab-label"),
-      (
-        panel: XUL.TabPanel | undefined,
-        deck: XUL.Deck,
-        win: Window,
-        reader: _ZoteroTypes.ReaderInstance,
-      ) => {
-        if (!panel) {
-          ztoolkit.log(
-            "This reader do not have right-side bar. Adding reader tab skipped.",
-          );
-          return;
-        }
-        ztoolkit.log(reader);
-        const elem = ztoolkit.UI.createElement(win.document, "vbox", {
-          id: `${config.addonRef}-${reader._instanceID}-extra-reader-tab-div`,
-          // This is important! Don't create content for multiple times
-          // ignoreIfExists: true,
-          removeIfExists: true,
-          children: [
-            {
-              tag: "h2",
-              properties: {
-                innerText: "Hello World!",
-              },
-            },
-            {
-              tag: "div",
-              properties: {
-                innerText: "This is a reader tab.",
-              },
-            },
-            {
-              tag: "div",
-              properties: {
-                innerText: `Reader: ${reader._title.slice(0, 20)}`,
-              },
-            },
-            {
-              tag: "div",
-              properties: {
-                innerText: `itemID: ${reader.itemID}.`,
-              },
-            },
-            {
-              tag: "button",
-              namespace: "html",
-              properties: {
-                innerText: "Unregister",
-              },
-              listeners: [
-                {
-                  type: "click",
-                  listener: () => {
-                    ztoolkit.ReaderTabPanel.unregister(tabId);
-                  },
-                },
-              ],
-            },
-          ],
-        });
-        panel.append(elem);
+  static async registerReaderItemPaneSection() {
+    Zotero.ItemPaneManager.registerSection({
+      paneID: "reader-example",
+      pluginID: addon.data.config.addonID,
+      header: {
+        l10nID: getLocaleID("item-section-example2-head-text"),
+        // Optional
+        l10nArgs: `{"status": "Initialized"}`,
+        // Can also have a optional dark icon
+        icon: "chrome://zotero/skin/16/universal/book.svg",
       },
-      {
-        targetIndex: 1,
+      sidenav: {
+        l10nID: getLocaleID("item-section-example2-sidenav-tooltip"),
+        icon: "chrome://zotero/skin/20/universal/save.svg",
       },
-    );
+      // Optional
+      bodyXHTML:
+        '<html:h1 id="test">THIS IS TEST</html:h1><browser disableglobalhistory="true" remote="true" maychangeremoteness="true" type="content" flex="1" id="browser" style="width: 180%; height: 280px"/>',
+      // Optional, Called when the section is first created, must be synchronous
+      onInit: ({ item }) => {
+        ztoolkit.log("Section init!", item?.id);
+      },
+      // Optional, Called when the section is destroyed, must be synchronous
+      onDestroy: (props) => {
+        ztoolkit.log("Section destroy!");
+      },
+      // Optional, Called when the section data changes (setting item/mode/tabType/inTrash), must be synchronous. return false to cancel the change
+      onItemChange: ({ item, setEnabled, tabType }) => {
+        ztoolkit.log(`Section item data changed to ${item?.id}`);
+        setEnabled(tabType === "reader");
+        return true;
+      },
+      // Called when the section is asked to render, must be synchronous.
+      onRender: ({
+        body,
+        item,
+        setL10nArgs,
+        setSectionSummary,
+        setSectionButtonStatus,
+      }) => {
+        ztoolkit.log("Section rendered!", item?.id);
+        const title = body.querySelector("#test") as HTMLElement;
+        title.style.color = "red";
+        title.textContent = "LOADING";
+        setL10nArgs(`{ "status": "Loading" }`);
+        setSectionSummary("loading!");
+        setSectionButtonStatus("test", { hidden: true });
+      },
+      // Optional, can be asynchronous.
+      onAsyncRender: async ({
+        body,
+        item,
+        setL10nArgs,
+        setSectionSummary,
+        setSectionButtonStatus,
+      }) => {
+        ztoolkit.log("Section secondary render start!", item?.id);
+        await Zotero.Promise.delay(1000);
+        ztoolkit.log("Section secondary render finish!", item?.id);
+        const title = body.querySelector("#test") as HTMLElement;
+        title.style.color = "green";
+        title.textContent = item.getField("title");
+        setL10nArgs(`{ "status": "Loaded" }`);
+        setSectionSummary("rendered!");
+        setSectionButtonStatus("test", { hidden: false });
+      },
+      // Optional, Called when the section is toggled. Can happen anytime even if the section is not visible or not rendered
+      onToggle: ({ item }) => {
+        ztoolkit.log("Section toggled!", item?.id);
+      },
+      // Optional, Buttons to be shown in the section header
+      sectionButtons: [
+        {
+          type: "test",
+          icon: "chrome://zotero/skin/16/universal/empty-trash.svg",
+          l10nID: getLocaleID("item-section-example2-button-tooltip"),
+          onClick: ({ item, paneID }) => {
+            ztoolkit.log("Section clicked!", item?.id);
+            Zotero.ItemPaneManager.unregisterSection(paneID);
+          },
+        },
+      ],
+    });
   }
 }
 
@@ -466,7 +363,7 @@ export class PromptExampleFactory {
   }
 
   @example
-  static registerAnonymousCommandExample() {
+  static registerAnonymousCommandExample(window: Window) {
     ztoolkit.Prompt.register([
       {
         id: "search",
@@ -522,7 +419,8 @@ export class PromptExampleFactory {
               if (i != 0) str += ", ";
 
               if (typeof node === "object") {
-                const label = document.createElement("label");
+                const label =
+                  Zotero.getMainWindow().document.createElement("label");
                 label.setAttribute("value", str);
                 label.setAttribute("crop", "end");
                 str = "";
@@ -530,7 +428,7 @@ export class PromptExampleFactory {
                 str += node;
               }
             }
-            str.length && (str += ".");
+            if (str.length) str += ".";
             return str;
           }
           function filter(ids: number[]) {
@@ -581,12 +479,12 @@ export class PromptExampleFactory {
                 hasValidCondition = true;
                 s.addCondition(
                   "joinMode",
-                  joinMode as Zotero.Search.Operator,
+                  joinMode as _ZoteroTypes.Search.Operator,
                   "",
                 );
                 s.addCondition(
                   conditions[0] as string,
-                  conditions[1] as Zotero.Search.Operator,
+                  conditions[1] as _ZoteroTypes.Search.Operator,
                   conditions[2] as string,
                 );
               }
@@ -601,7 +499,7 @@ export class PromptExampleFactory {
             ids.forEach((id: number) => {
               const item = Zotero.Items.get(id);
               const title = item.getField("title");
-              const ele = ztoolkit.UI.createElement(document, "div", {
+              const ele = ztoolkit.UI.createElement(window.document!, "div", {
                 namespace: "html",
                 classList: ["command"],
                 listeners: [
@@ -616,8 +514,8 @@ export class PromptExampleFactory {
                     type: "click",
                     listener: () => {
                       prompt.promptNode.style.display = "none";
-                      Zotero_Tabs.select("zotero-pane");
-                      ZoteroPane.selectItem(item.id);
+                      ztoolkit.getGlobal("Zotero_Tabs").select("zotero-pane");
+                      ztoolkit.getGlobal("ZoteroPane").selectItem(item.id);
                     },
                   },
                 ],
@@ -672,12 +570,12 @@ export class PromptExampleFactory {
         label: "Plugin Template",
         // The when function is executed when Prompt UI is woken up by `Shift + P`, and this command does not display when false is returned.
         when: () => {
-          const items = ZoteroPane.getSelectedItems();
+          const items = ztoolkit.getGlobal("ZoteroPane").getSelectedItems();
           return items.length > 0;
         },
         callback(prompt) {
           prompt.inputNode.placeholder = "Hello World!";
-          const items = ZoteroPane.getSelectedItems();
+          const items = ztoolkit.getGlobal("ZoteroPane").getSelectedItems();
           ztoolkit.getGlobal("alert")(
             `You select ${items.length} items!\n\n${items
               .map(
@@ -775,130 +673,130 @@ export class HelperExampleFactory {
         tag: "h2",
         properties: { innerHTML: "Toolkit Helper Examples" },
       })
-      // .addCell(
-      //   6,
-      //   0,
-      //   {
-      //     tag: "button",
-      //     namespace: "html",
-      //     attributes: {
-      //       type: "button",
-      //     },
-      //     listeners: [
-      //       {
-      //         type: "click",
-      //         listener: (e: Event) => {
-      //           addon.hooks.onDialogEvents("clipboardExample");
-      //         },
-      //       },
-      //     ],
-      //     children: [
-      //       {
-      //         tag: "div",
-      //         styles: {
-      //           padding: "2.5px 15px",
-      //         },
-      //         properties: {
-      //           innerHTML: "example:clipboard",
-      //         },
-      //       },
-      //     ],
-      //   },
-      //   false,
-      // )
-      // .addCell(
-      //   7,
-      //   0,
-      //   {
-      //     tag: "button",
-      //     namespace: "html",
-      //     attributes: {
-      //       type: "button",
-      //     },
-      //     listeners: [
-      //       {
-      //         type: "click",
-      //         listener: (e: Event) => {
-      //           addon.hooks.onDialogEvents("filePickerExample");
-      //         },
-      //       },
-      //     ],
-      //     children: [
-      //       {
-      //         tag: "div",
-      //         styles: {
-      //           padding: "2.5px 15px",
-      //         },
-      //         properties: {
-      //           innerHTML: "example:filepicker",
-      //         },
-      //       },
-      //     ],
-      //   },
-      //   false,
-      // )
-      // .addCell(
-      //   8,
-      //   0,
-      //   {
-      //     tag: "button",
-      //     namespace: "html",
-      //     attributes: {
-      //       type: "button",
-      //     },
-      //     listeners: [
-      //       {
-      //         type: "click",
-      //         listener: (e: Event) => {
-      //           addon.hooks.onDialogEvents("progressWindowExample");
-      //         },
-      //       },
-      //     ],
-      //     children: [
-      //       {
-      //         tag: "div",
-      //         styles: {
-      //           padding: "2.5px 15px",
-      //         },
-      //         properties: {
-      //           innerHTML: "example:progressWindow",
-      //         },
-      //       },
-      //     ],
-      //   },
-      //   false,
-      // )
-      // .addCell(
-      //   9,
-      //   0,
-      //   {
-      //     tag: "button",
-      //     namespace: "html",
-      //     attributes: {
-      //       type: "button",
-      //     },
-      //     listeners: [
-      //       {
-      //         type: "click",
-      //         listener: (e: Event) => {
-      //           addon.hooks.onDialogEvents("vtableExample");
-      //         },
-      //       },
-      //     ],
-      //     children: [
-      //       {
-      //         tag: "div",
-      //         styles: {
-      //           padding: "2.5px 15px",
-      //         },
-      //         properties: {
-      //           innerHTML: "example:virtualized-table",
-      //         },
-      //       },
-      //     ],
-      //   },
-      //   false,
-      // )
+      .addCell(
+        6,
+        0,
+        {
+          tag: "button",
+          namespace: "html",
+          attributes: {
+            type: "button",
+          },
+          listeners: [
+            {
+              type: "click",
+              listener: (e: Event) => {
+                addon.hooks.onDialogEvents("clipboardExample");
+              },
+            },
+          ],
+          children: [
+            {
+              tag: "div",
+              styles: {
+                padding: "2.5px 15px",
+              },
+              properties: {
+                innerHTML: "example:clipboard",
+              },
+            },
+          ],
+        },
+        false,
+      )
+      .addCell(
+        7,
+        0,
+        {
+          tag: "button",
+          namespace: "html",
+          attributes: {
+            type: "button",
+          },
+          listeners: [
+            {
+              type: "click",
+              listener: (e: Event) => {
+                addon.hooks.onDialogEvents("filePickerExample");
+              },
+            },
+          ],
+          children: [
+            {
+              tag: "div",
+              styles: {
+                padding: "2.5px 15px",
+              },
+              properties: {
+                innerHTML: "example:filepicker",
+              },
+            },
+          ],
+        },
+        false,
+      )
+      .addCell(
+        8,
+        0,
+        {
+          tag: "button",
+          namespace: "html",
+          attributes: {
+            type: "button",
+          },
+          listeners: [
+            {
+              type: "click",
+              listener: (e: Event) => {
+                addon.hooks.onDialogEvents("progressWindowExample");
+              },
+            },
+          ],
+          children: [
+            {
+              tag: "div",
+              styles: {
+                padding: "2.5px 15px",
+              },
+              properties: {
+                innerHTML: "example:progressWindow",
+              },
+            },
+          ],
+        },
+        false,
+      )
+      .addCell(
+        9,
+        0,
+        {
+          tag: "button",
+          namespace: "html",
+          attributes: {
+            type: "button",
+          },
+          listeners: [
+            {
+              type: "click",
+              listener: (e: Event) => {
+                addon.hooks.onDialogEvents("vtableExample");
+              },
+            },
+          ],
+          children: [
+            {
+              tag: "div",
+              styles: {
+                padding: "2.5px 15px",
+              },
+              properties: {
+                innerHTML: "example:virtualized-table",
+              },
+            },
+          ],
+        },
+        false,
+      )
       .addButton("Confirm", "confirm")
       .addButton("Cancel", "cancel")
       .addButton("Help", "help", {
@@ -914,7 +812,7 @@ export class HelperExampleFactory {
     addon.data.dialog = dialogHelper;
     await dialogData.unloadLock.promise;
     addon.data.dialog = undefined;
-    addon.data.alive &&
+    if (addon.data.alive)
       ztoolkit.getGlobal("alert")(
         `Close dialog with ${dialogData._lastButtonId}.\nCheckbox: ${dialogData.checkboxValue}\nInput: ${dialogData.inputValue}.`,
       );
@@ -952,7 +850,7 @@ export class HelperExampleFactory {
 
   @example
   static progressWindowExample() {
-    new ztoolkit.ProgressWindow(config.addonName)
+    new ztoolkit.ProgressWindow(addon.data.config.addonName)
       .createLine({
         text: "ProgressWindow Example!",
         type: "success",

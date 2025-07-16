@@ -5,7 +5,22 @@
 
 This is a plugin template for [Zotero](https://www.zotero.org/).
 
-Some plugins created with this template:
+[English](README.md) | [简体中文](doc/README-zhCN.md) | [Français](doc/README-frFR.md)
+
+- Documentation for plugins development
+  - [📖 Plugin Development Documentation](https://zotero-chinese.com/plugin-dev-guide/) (Chinese, not yet complete)
+  - [📖 Plugin Development Documentation for Zotero 7](https://www.zotero.org/support/dev/zotero_7_for_developers)
+- Tools for plugins development
+  - [🛠️ Zotero Plugin Toolkit](https://github.com/windingwind/zotero-plugin-toolkit) | [API Documentation](https://github.com/windingwind/zotero-plugin-toolkit/blob/master/docs/zotero-plugin-toolkit.md)
+  - [🛠️ Zotero Plugin Scaffold](https://github.com/northword/zotero-plugin-scaffold)
+  - [ℹ️ Zotero Type Definitions](https://github.com/windingwind/zotero-types)
+  - [📜 Zotero Source Code](https://github.com/zotero/zotero)
+  - [📌 Zotero Plugin Template](https://github.com/windingwind/zotero-plugin-template) (This repo)
+
+> [!tip]
+> 👁 Watch this repo so that you can be notified whenever there are fixes & updates.
+
+## Plugins built with this template
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/windingwind/zotero-better-notes?label=zotero-better-notes&style=flat-square)](https://github.com/windingwind/zotero-better-notes)
 [![GitHub Repo stars](https://img.shields.io/github/stars/windingwind/zotero-pdf-preview?label=zotero-pdf-preview&style=flat-square)](https://github.com/windingwind/zotero-pdf-preview)
@@ -24,23 +39,13 @@ Some plugins created with this template:
 [![GitHub Repo stars](https://img.shields.io/github/stars/MuiseDestiny/zotero-gpt?label=zotero-gpt&style=flat-square)](https://github.com/MuiseDestiny/zotero-gpt)
 [![GitHub Repo stars](https://img.shields.io/github/stars/zoushucai/zotero-journalabbr?label=zotero-journalabbr&style=flat-square)](https://github.com/zoushucai/zotero-journalabbr)
 [![GitHub Repo stars](https://img.shields.io/github/stars/MuiseDestiny/zotero-figure?label=zotero-figure&style=flat-square)](https://github.com/MuiseDestiny/zotero-figure)
-[![GitHub Repo stars](https://img.shields.io/github/stars/MuiseDestiny/zotero-file?label=WanderingFile&style=flat-square)](https://github.com/MuiseDestiny/zotero-file)
 [![GitHub Repo stars](https://img.shields.io/github/stars/l0o0/jasminum?label=jasminum&style=flat-square)](https://github.com/l0o0/jasminum)
 [![GitHub Repo stars](https://img.shields.io/github/stars/lifan0127/ai-research-assistant?label=ai-research-assistant&style=flat-square)](https://github.com/lifan0127/ai-research-assistant)
+[![GitHub Repo stars](https://img.shields.io/github/stars/daeh/zotero-markdb-connect?label=zotero-markdb-connect&style=flat-square)](https://github.com/daeh/zotero-markdb-connect)
 
-📖 [Plugin Development Documentation](https://zotero.yuque.com/books/share/8d230829-6004-4934-b4c6-685a7001bfa0/vec88d) (Chinese, provides English translation)
+If you are using this repo, I recommended that you put the following badge on your README:
 
-🛠️ [Zotero Plugin Toolkit](https://github.com/windingwind/zotero-plugin-toolkit) | [API Documentation](https://github.com/windingwind/zotero-plugin-toolkit/blob/master/docs/zotero-plugin-toolkit.md)
-
-ℹ️ [Zotero Type Definitions](https://github.com/windingwind/zotero-types)
-
-📜 [Zotero Source Code](https://github.com/zotero/zotero)
-
-📌 [Zotero Plugin Template](https://github.com/windingwind/zotero-plugin-template) (This repo)
-
-> 👁 Watch this repo so that you can be notified whenever there are fixes & updates.
-
-If you are using this repo, I recommended that you put this badge ([![Using Zotero Plugin Template](https://img.shields.io/badge/Using-Zotero%20Plugin%20Template-blue?style=flat-square&logo=github)](https://github.com/windingwind/zotero-plugin-template)) on your README:
+[![Using Zotero Plugin Template](https://img.shields.io/badge/Using-Zotero%20Plugin%20Template-blue?style=flat-square&logo=github)](https://github.com/windingwind/zotero-plugin-template)
 
 ```md
 [![Using Zotero Plugin Template](https://img.shields.io/badge/Using-Zotero%20Plugin%20Template-blue?style=flat-square&logo=github)](https://github.com/windingwind/zotero-plugin-template)
@@ -48,19 +53,18 @@ If you are using this repo, I recommended that you put this badge ([![Using Zote
 
 ## Features
 
-> ❗The localization system is upgraded (dtd is deprecated and we do not use .properties anymore). Only supports Zotero 7.0.0-beta.12 or higher now. If you want to support Zotero 6, you may need to use `dtd`, `properties`, and `ftl` at the same time. See the staled branch `zotero6-bootstrap`.
-
 - Event-driven, functional programming, under extensive skeleton;
 - Simple and user-friendly, works out-of-the-box.
-- ⭐[New!]Auto hot reload! Whenever the source code is modified, automatically compile and reload. [See here→](#auto-hot-reload)
-- Abundant examples in `src/modules/examples.ts`, covering most of the commonly used APIs in plugins(using [zotero-plugin-toolkit](https://github.com/windingwind/zotero-plugin-toolkit));
+- ⭐ [New!] Auto hot reload! Whenever the source code is modified, automatically compile and reload. [See here→](#auto-hot-reload)
+- Abundant examples in `src/modules/examples.ts`, covering most of the commonly used APIs in plugins (using [zotero-plugin-toolkit](https://github.com/windingwind/zotero-plugin-toolkit));
 - TypeScript support:
-  - Full type definition support for the whole Zotero project, which is written in JavaScript(using [zotero-types](https://github.com/windingwind/zotero-types));
+  - Full type definition support for the whole Zotero project, which is written in JavaScript (using [zotero-types](https://github.com/windingwind/zotero-types));
   - Global variables and environment setup;
-- Plugin build/test/release workflow:
-  - Automatically generate/update plugin id/version, update configrations, and set environment variables(`development/production`);
+- Plugin develop/build/release workflow:
+  - Automatically generate/update plugin id/version, update configrations, and set environment variables (`development` / `production`);
   - Automatically build and reload code in Zotero;
-  - Automatically release to GitHub(using [release-it](https://github.com/release-it/release-it));
+  - Automatically release to GitHub;
+- Prettier and ES Lint integration.
 
 ## Examples
 
@@ -100,7 +104,7 @@ Search `@example` in `src/examples.ts`. The examples are called in `src/hooks.ts
 
 - Preferences bindings
 - UI Events
-- Tabel
+- Table
 - Locale
 
 See [`src/modules/preferenceScript.ts`](./src/modules/preferenceScript.ts)
@@ -127,110 +131,90 @@ Activate with `Shift+P`.
 
 ## Quick Start Guide
 
-### Install Pre-built `xpi`
+### 0 Requirement
 
-See how the examples work by directly downloading the `xpi` file from GitHub release and install it to your Zotero.
+1. Install a beta version of Zotero: <https://www.zotero.org/support/beta_builds>
+2. Install [Node.js](https://nodejs.org/en/) and [Git](https://git-scm.com/)
 
-This is also how your plugin will be released and used by others.
+> [!note]
+> This guide assumes that you have an initial understanding of the basic structure and workings of the Zotero plugin. If you don't, please refer to the [documentation](https://www.zotero.org/support/dev/zotero_7_for_developers) and official plugin examples [Make It Red](https://github.com/zotero/make-it-red) first.
 
-> The release do not promise any real functions. It is probably not up-to-date.
->
-> The `xpi` package is a zip file. However, please don't modify it directly. Modify the source code and build it.
+### 1 Creat Your Repo
 
-### Build from Source
+1. Click `Use this template`
+2. Git clone your new repo
+   <details >
+   <summary>💡 Start with GitHub Codespace</summary>
 
-- Fork this repo/Click `Use this template`;
-- Git clone the forked repo;
-- Enter the repo folder;
-<details >
-<summary>💡 Start with GitHub Codespace</summary>
+   _GitHub CodeSpace_ enables you getting started without the need to download code/IDE/dependencies locally.
 
-_GitHub CodeSpace_ enables you getting started without the need to download code/IDE/dependencies locally.
+   Replace the steps above and build you first plugin in 30 seconds!
 
-Replace the steps above and build you first plugin in 30 seconds!
+   - Goto top of the [homepage](https://github.com/windingwind/zotero-plugin-template), click the green button `Use this template`, click `Open in codespace`. You may need to login to your GitHub account.
+   - Wait for codespace to load.
 
-- Goto top of the [homepage](https://github.com/windingwind/zotero-plugin-template), click the green button `Use this template`, click `Open in codespace`. You may need to login to your GitHub account.
-- Wait for codespace to load.
+   </details>
 
-</details>
+3. Enter the repo folder
 
-- Modify the settings in `./package.json`, including:
+### 2 Config Template Settings and Environment
 
-  ```json5
-  {
-    version,
-    author,
-    description,
-    homepage,
-    config {
-      releasepage, // URL to releases(`.xpi`)
-      updaterdf, // URL to update.json
-      addonName, // name to be displayed in the plugin manager
-      addonID, // ID to avoid confliction. IMPORTANT!
-      addonRef, // e.g. Element ID prefix
-      addonInstance // the plugin's root instance: Zotero.${addonInstance}
-    }
-  }
-  ```
+1. Modify the settings in `./package.json`, including:
 
-  > Be careful to set the addonID and addonRef to avoid confliction.
-
-- Run `npm install` to set up the plugin and install dependencies. If you don't have NodeJS installed, please download it [here](https://nodejs.org/en/);
-- Run `npm run build` to build the plugin in production mode. Run `npm run build-dev` to build the plugin in development mode. The xpi for installation and the built code is under `build` folder.
-
-  > What the difference between dev & prod?
-  >
-  > - This environment variable is stored in `Zotero.${addonInstance}.data.env`. The outputs to console is disabled in prod mode.
-  > - You can decide what users cannot see/use based on this variable.
-
-### Release
-
-To build and release, use
-
-```shell
-# A release-it command: version increase, npm run build, git push, and GitHub release
-# You need to set the environment variable GITHUB_TOKEN https://github.com/settings/tokens
-# release-it: https://github.com/release-it/release-it
-npm run release
-```
-
-### Setup Development Environment
-
-1. Install a beta version of Zotero: <https://www.zotero.org/support/beta_builds> (Zotero 7 beta: <https://www.zotero.org/support/dev/zotero_7_for_developers>)
-
-2. Install Firefox 102 (for Zotero 7)
-
-3. Copy zotero command line config file. Modify the commands that starts your installation of the beta Zotero.
-
-   > (Optional) Do this only once: Start the beta Zotero with `/path/to/zotero -p`. Create a new profile and use it as your development profile.
-   > Put the path of the profile into the `profilePath` in `zotero-cmd.json` to specify which profile to use.
-
-   ```sh
-   cp ./scripts/zotero-cmd-default.json ./scripts/zotero-cmd.json
-   vim ./scripts/zotero-cmd.json
+   ```json5
+   {
+     version: "", // to 0.0.0
+     author: "",
+     description: "",
+     homepage: "",
+     config: {
+       addonName: "", // name to be displayed in the plugin manager
+       addonID: "", // ID to avoid conflict. IMPORTANT!
+       addonRef: "", // e.g. Element ID prefix
+       addonInstance: "", // the plugin's root instance: Zotero.${addonInstance}
+       prefsPrefix: "extensions.zotero.${addonRef}", // the prefix of prefs
+     },
+   }
    ```
 
-4. Build plugin and restart Zotero with `npm run restart`.
+   > [!warning]
+   > Be careful to set the addonID and addonRef to avoid conflict.
 
-5. Launch Firefox 102 (Zotero 7)
+   If you need to host your XPI packages outside of GitHub, modify `updateURL` and add `xpiDownloadLink` in `zotero-plugin.config.ts`.
 
-6. In Firefox, go to devtools, go to settings, click "enable remote debugging" and the one next to it that's also about debugging
+2. Copy the environment variable file. Modify the commands that starts your installation of the beta Zotero.
 
-   > Enter `about:debugging#/setup` in FF 102.
+   > Create a development profile (Optional)  
+   > Start the beta Zotero with `/path/to/zotero -p`. Create a new profile and use it as your development profile. Do this only once
 
-7. In Zotero, go to setting, advanced, config editor, look up "debugging" and click on "allow remote debugging".
+   ```sh
+   cp .env.example .env
+   vim .env
+   ```
 
-8. Connect to Zotero in Firefox. In FF 102, enter `localhost:6100` in the bottom input of remote-debugging page and click `add`.
+   If you are developing more than one plugin, you can store the bin path and profile path in the system environment variables, which can be omitted here.
 
-9. Click `connect` in the leftside-bar of Firefox remote-debugging page.
+3. Install dependencies with `npm install`
 
-10. Click "Inspect Main Process"
+   > If you are using `pnpm` as the package manager for your project, you need to add `public-hoist-pattern[]=*@types/bluebird*` to `.npmrc`, see <https://github.com/windingwind/zotero-types?tab=readme-ov-file#usage>.
 
-### Auto Hot Reload
+   If you get `npm ERR! ERESOLVE unable to resolve dependency tree` with `npm install`, which is an upstream dependency bug of typescript-eslint, use the `npm i -f` command to install it.
+
+### 3 Coding
+
+Start development server with `npm start`, it will:
+
+- Prebuild the plugin in development mode
+- Start Zotero with plugin loaded from `build/`
+- Watch `src/**` and `addon/**`.
+  - If `src/**` changed, run esbuild and reload
+  - If `addon/**` has changed, rebuild the plugin (in development mode) and reload
+
+#### Auto Hot Reload
 
 Tired of endless restarting? Forget about it!
 
-1. Run `npm run start-watch`. (If Zotero is already running, use `npm run watch`)
+1. Run `npm start`.
 2. Coding. (Yes, that's all)
 
 When file changes are detected in `src` or `addon`, the plugin will be automatically compiled and reloaded.
@@ -238,27 +222,72 @@ When file changes are detected in `src` or `addon`, the plugin will be automatic
 <details style="text-indent: 2em">
 <summary>💡 Steps to add this feature to an existing plugin</summary>
 
-1. Copy `scripts/reload.mjs`
-2. Copy `reload`, `watch`, and `start-watch` commands in `package.json`
-3. Run `npm install --save-dev chokidar-cli`
-4. Done.
+Please see [zotero-plugin-scaffold](https://github.com/northword/zotero-plugin-scaffold).
 
 </details>
 
-### Debug in Zotero
+#### Debug in Zotero
 
 You can also:
 
-- Test code snipastes in Tools->Developer->Run Javascript;
+- Test code snippets in Tools -> Developer -> Run Javascript;
 - Debug output with `Zotero.debug()`. Find the outputs in Help->Debug Output Logging->View Output;
 - Debug UI. Zotero is built on the Firefox XUL framework. Debug XUL UI with software like [XUL Explorer](https://udn.realityripple.com/docs/Archive/Mozilla/XUL_Explorer).
   > XUL Documentation: <http://www.devdoc.net/web/developer.mozilla.org/en-US/docs/XUL.html>
+
+### 4 Build
+
+Run `npm run build` to build the plugin in production mode, and the xpi for installation and the built code is under `build` folder.
+
+Steps of build:
+
+- Create/empty `build/`.
+- Copy `addon/**` to `build/addon/**`
+- Replace placeholders: use `replace-in-file` to replace keywords and configurations defined in `package.json` in non-build files (`xhtml`, `json`, et al.).
+- Prepare locale files to [avoid conflict](https://www.zotero.org/support/dev/zotero_7_for_developers#avoiding_localization_conflicts)
+  - Rename `**/*.flt` to `**/${addonRef}-*.flt`
+  - Prefix each fluent message with `addonRef-`
+- Use ESBuild to build `.ts` source code to `.js`, build `src/index.ts` to `./build/addon/content/scripts`.
+- (Production mode only) Zip the `./build/addon` to `./build/*.xpi`
+- (Production mode only) Prepare `update.json` or `update-beta.json`
+
+> [!note]
+>
+> **What's the difference between dev & prod?**
+>
+> - This environment variable is stored in `Zotero.${addonInstance}.data.env`. The outputs to console is disabled in prod mode.
+> - You can decide what users cannot see/use based on this variable.
+> - In production mode, the build script will pack the plugin and update the `update.json`.
+
+### 5 Release
+
+To build and release, use
+
+```shell
+# version increase, git add, commit and push
+# then on ci, npm run build, and release to GitHub
+npm run release
+```
+
+> [!note]
+> This will use [Bumpp](https://github.com/antfu-collective/bumpp) to prompt for the new version number, locally bump the version, run any (pre/post)version scripts defined in `package.json`, commit, build (optional), tag the commit with the version number and push commits and git tags. Bumpp can be configured in `zotero-plugin-config.ts`; for example, add `release: { bumpp: { execute: "npm run build" } }` to also build before committing.
+>
+> Subsequently GitHub Action will rebuild the plugin and use `zotero-plugin-scaffold`'s `release` script to publish the XPI to GitHub Release. In addition, a separate release (tag: `release`) will be created or updated that includes update manifests `update.json` and `update-beta.json` as assets. These will be available at `https://github.com/{{owner}}/{{repo}}/releases/download/release/update*.json`.
+
+#### About Prerelease
+
+The template defines `prerelease` as the beta version of the plugin, when you select a `prerelease` version in Bumpp (with `-` in the version number). The build script will create a new `update-beta.json` for prerelease use, which ensures that users of the regular version won't be able to update to the beta. Only users who have manually downloaded and installed the beta will be able to update to the next beta automatically.
+
+When the next regular release is updated, both `update.json` and `update-beta.json` will be updated (on the special `release` release, see above) so that both regular and beta users can update to the new regular release.
+
+> [!warning]
+> Strictly, distinguishing between Zotero 6 and Zotero 7 compatible plugin versions should be done by configuring `applications.zotero.strict_min_version` in `addons.__addonID__.updates[]` of `update.json` respectively, so that Zotero recognizes it properly, see <https://www.zotero.org/support/dev/zotero_7_for_developers#updaterdf_updatesjson>.
 
 ## Details
 
 ### About Hooks
 
-> See also [`src/hooks.ts`](https://github.com/windingwind/zotero-plugin-template/blob/bootstrap/src/hooks.ts)
+> See also [`src/hooks.ts`](https://github.com/windingwind/zotero-plugin-template/blob/main/src/hooks.ts)
 
 1. When install/enable/startup triggered from Zotero, `bootstrap.js` > `startup` is called
    - Wait for Zotero ready
@@ -272,7 +301,7 @@ You can also:
 
 ### About Global Variables
 
-> See also [`src/index.ts`](https://github.com/windingwind/zotero-plugin-template/blob/bootstrap/src/index.ts)
+> See also [`src/index.ts`](https://github.com/windingwind/zotero-plugin-template/blob/main/src/index.ts)
 
 The bootstrapped plugin runs in a sandbox, which does not have default global variables like `Zotero` or `window`, which we used to have in the overlay plugins' window environment.
 
@@ -295,20 +324,6 @@ createElement(document, "hbox"); // returns XUL.Box
 createElement(document, "button", { namespace: "xul" }); // manually set namespace. returns XUL.Button
 ```
 
-### About Build
-
-Use Esbuild to build `.ts` source code to `.js`.
-
-Use `replace-in-file` to replace keywords and configurations defined in `package.json` in non-build files (`xhtml`, `.flt`, et. al.).
-
-Steps in `scripts/build.mjs`:
-
-1. Clean `./build`
-2. Copy `./addon` to `./build`
-3. Esbuild to `./build/addon/chrome/content/scripts`
-4. Replace `__buildVersion__` and `__buildTime__` in `./build/addon`
-5. Zip the `./build/addon` to `./build/*.xpi`
-
 ### About Zotero API
 
 Zotero docs are outdated and incomplete. Clone <https://github.com/zotero/zotero> and search the keyword globally.
@@ -325,68 +340,63 @@ This section shows the directory structure of a template.
 
 - All `.js/.ts` code files are in `./src`;
 - Addon config files: `./addon/manifest.json`;
-- UI files: `./addon/chrome/content/*.xhtml`.
+- UI files: `./addon/content/*.xhtml`.
 - Locale files: `./addon/locale/**/*.flt`;
 - Preferences file: `./addon/prefs.js`;
-  > Don't break the lines in the `prefs.js`
 
 ```shell
 .
-|-- .eslintrc.json            # eslint conf
-|-- .gitattributes            # git conf
 |-- .github/                  # github conf
-|-- .gitignore                # git conf
-|-- .prettierrc               # prettier conf
-|-- .release-it.json          # release-it conf
-|-- .vscode                   # vs code conf
-|   |-- extensions.json
-|   |-- launch.json
-|   |-- setting.json
-|   `-- toolkit.code-snippets
-|-- package-lock.json         # npm conf
-|-- package.json              # npm conf
-|-- LICENSE
-|-- README.md
-|-- addon
-|   |-- bootstrap.js               # addon load/unload script, like a main.c
-|   |-- chrome
-|   |   `-- content
-|   |       |-- icons/
-|   |       |-- preferences.xhtml  # preference panel
-|   |       `-- zoteroPane.css
-|   |-- locale                     # locale
+|-- .vscode/                  # vscode conf
+|-- addon                     # static files
+|   |-- bootstrap.js
+|   |-- content
+|   |   |-- icons
+|   |   |   |-- favicon.png
+|   |   |   `-- favicon@0.5x.png
+|   |   |-- preferences.xhtml
+|   |   `-- zoteroPane.css
+|   |-- locale
 |   |   |-- en-US
 |   |   |   |-- addon.ftl
+|   |   |   |-- mainWindow.ftl
 |   |   |   `-- preferences.ftl
 |   |   `-- zh-CN
 |   |       |-- addon.ftl
+|   |       |-- mainWindow.ftl
 |   |       `-- preferences.ftl
-|   |-- manifest.json              # addon config
+|   |-- manifest.json
 |   `-- prefs.js
-|-- build/                         # build dir
-|-- scripts                        # scripts for dev
-|   |-- build.mjs                  # esbuild and replace
-|   |-- reload.mjs
-|   |-- start.mjs
-|   |-- stop.mjs
-|   `-- zotero-cmd-default.json
-|-- src                           # source code
+|-- build                         # build dir
+|-- node_modules
+|-- src                           # source code of scripts
 |   |-- addon.ts                  # base class
 |   |-- hooks.ts                  # lifecycle hooks
 |   |-- index.ts                  # main entry
 |   |-- modules                   # sub modules
 |   |   |-- examples.ts
 |   |   `-- preferenceScript.ts
-|   `-- utils                     # utilities
+|   `-- utils                 # utilities
 |       |-- locale.ts
 |       |-- prefs.ts
 |       |-- wait.ts
-|       `-- window.ts
-|-- tsconfig.json                 # https://code.visualstudio.com/docs/languages/jsconfig
-|-- typings                       # ts typings
+|       |-- window.ts
+|       `-- ztoolkit.ts
+|-- typings                   # ts typings
 |   `-- global.d.ts
-|-- update-template.json          # template of `update.json`
-`-- update.json
+
+|-- .env                      # enviroment config (do not check into repo)
+|-- .env.example              # template of enviroment config, https://github.com/northword/zotero-plugin-scaffold
+|-- .gitignore                # git conf
+|-- .gitattributes            # git conf
+|-- .prettierrc               # prettier conf, https://prettier.io/
+|-- eslint.config.mjs         # eslint conf, https://eslint.org/
+|-- LICENSE
+|-- package-lock.json
+|-- package.json
+|-- tsconfig.json             # typescript conf, https://code.visualstudio.com/docs/languages/jsconfig
+|-- README.md
+`-- zotero-plugin.config.ts   # scaffold conf, https://github.com/northword/zotero-plugin-scaffold
 ```
 
 ## Disclaimer

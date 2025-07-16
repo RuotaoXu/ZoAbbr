@@ -217,11 +217,13 @@ export class myHelper {
       series = getSeries(name);
       item.setField("series", series);
     }
+    item.setField("seriesTitle", item.getField("year").slice(-2));
     item.saveTx();
     // ztoolkit.getGlobal("alert")(series);
   }
   static updateSelected() {
-    const items = ZoteroPane.getSelectedItems();
+
+    const items = Zotero.getActiveZoteroPane().getSelectedItems();
     for (let i = 0; i < items.length; i++) {
       myHelper.update(items[i]);
     }
