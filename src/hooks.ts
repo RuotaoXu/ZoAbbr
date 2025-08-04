@@ -77,6 +77,18 @@ async function onNotify(
   ) {
     const items = Zotero.Items.get(Number(ids[0]));
     myHelper.update(items);
+    const filename = items.getField("year").slice(-2) + "-" + items.getField("series") + "-" + items.getField("title").replace(/[{}:]/g, '');
+    // --- 复制到剪贴板 (兼容 Zotero 6 & 7) ---
+    // 检查 Zotero 7 的新函数是否存在
+    if (typeof Zotero.Utilities.copyToClipboard === 'function') {
+      await Zotero.Utilities.copyToClipboard(filename);
+    }
+    // 如果不存在，则回退到 Zotero 6 的方法 (即您最初使用的方法)
+    else {
+      const clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
+        .getService(Components.interfaces.nsIClipboardHelper);
+      clipboard.copyString(filename);
+    }
   } else {
     return;
   }
