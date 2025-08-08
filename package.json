@@ -1,24 +1,24 @@
 {
-  "name": "zotero-abbr",
+  "name": "zoplicate",
   "type": "module",
-  "version": "1.3.6",
-  "description": "Zotero Journal and Conference Name Abbreviation",
+  "version": "1.3.7-beta.1",
+  "description": "Detect and manage duplicate items in Zotero.",
   "config": {
-    "addonName": "Zotero Name Abbreviation",
-    "addonID": "zoAbbr@euclpts.com",
-    "addonRef": "zoabbr",
-    "addonInstance": "AddonTemplate",
-    "prefsPrefix": "extensions.zotero.abbr"
+    "addonName": "Zoplicate",
+    "addonID": "zoplicate@chenglongma.com",
+    "addonRef": "zoplicate",
+    "addonInstance": "Zoplicate",
+    "prefsPrefix": "extensions.zotero.zoplicate"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RuotaoXu/ZoAbbr.git"
+    "url": "git+https://github.com/ChenglongMa/zoplicate.git"
   },
   "author": "TOTAL",
   "bugs": {
-    "url": "https://github.com/RuotaoXu/ZoAbbr/issues"
+    "url": "https://github.com/ChenglongMa/zoplicate/issues"
   },
-  "homepage": "https://github.com/windingwind/zotero-plugin-template#readme",
+  "homepage": "https://chenglongma.com/zoplicate/",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "zotero-plugin serve",
@@ -33,14 +33,20 @@
     "zotero-plugin-toolkit": "^5.0.0-0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.23.0",
-    "@types/node": "^22.13.13",
-    "eslint": "^9.23.0",
-    "prettier": "^3.5.3",
-    "typescript": "^5.8.2",
-    "typescript-eslint": "^8.28.0",
-    "zotero-plugin-scaffold": "^0.4.1",
-    "zotero-types": "^4.0.0-beta.3"
+    "@jest/globals": "^29.7.0",
+    "@types/node": "^22.13.5",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
+    "eslint": "^9.21.0",
+    "eslint-config-prettier": "^10.0.2",
+    "fake-indexeddb": "^6.0.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.5.2",
+    "ts-jest": "^29.2.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "zotero-plugin-scaffold": "^0.2.4",
+    "zotero-types": "3.1.7"
   },
   "prettier": {
     "printWidth": 80,
